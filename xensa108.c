@@ -8,13 +8,9 @@
  *
  */
 #include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/proc_fs.h>
-#include <linux/fs.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 #include <linux/slab.h>
-#include <asm/apic.h>
 
 
 #define XSA108_MOD_NAME "xensa108"
@@ -45,8 +41,7 @@ static int _x2apic_init(void)
 
     if (msr & X2APIC_ENABLE)
     {
-        printk(KERN_INFO "%s: x2apic enabled\n",
-               XSA108_MOD_NAME);
+        printk(KERN_INFO "%s: x2apic enabled\n", XSA108_MOD_NAME);
         return 0;
     }
 
