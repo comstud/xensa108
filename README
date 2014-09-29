@@ -1,0 +1,35 @@
+--
+
+Exploit for XSA 108
+
+This is a linux kernel module that creates an entry in /proc called
+'xensa108'. When read, this triggers rdmsr cpu instructions to read
+MSRs in x2apic mode that xen should have disallowed.
+
+When querying above the 256th register, Xen overflows its internal buffer
+that stores the emulated register values. Only 4 bytes is pulled out of
+the buffer for each MSR, even though this buffer holds 16 bytes per MSR.
+This means that the data you get back is a set of 4 bytes within this
+buffer, at 16 byte offset increments (there's 12 bytes you cannot
+retrieve -- xen doesn't expose them). All in all, this means that 3
+extra pages of memory are accessed beyond the end of the buffer. I suppose
+it's also possible a page fault could occur, which would crash the
+hypervisor.
+
+INSTALL:
+
+1) Make sure kernel headers are installed and you have a build system
+   (on ubuntu: 'apt-get install build-essential module-assistant')
+2) Run 'make'
+3) Run 'insmod ./xensa108.ko'
+4) strings /proc/xensa108 or od /proc/xensa108, etc.
+
+TO REMOVE:
+
+1) rmmod xensa108
+
+--
+
+Enjoy,
+
+comstud
