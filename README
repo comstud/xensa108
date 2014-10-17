@@ -2,6 +2,9 @@
 
 Exploit for XSA 108
 
+I developed this for Rackspace as a PoC to see how vulnerable we were
+before we patched, as well as to verify the fix.
+
 This is a linux kernel module that creates an entry in /proc called
 'xensa108'. When read, this triggers rdmsr cpu instructions to read
 MSRs in x2apic mode that xen should have disallowed.
